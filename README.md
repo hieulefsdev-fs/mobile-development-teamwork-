@@ -79,5 +79,4 @@ app/src/main/
 ## 👥 Nhóm Thực Hiện
 
 **Nhóm 3 - Học phần Lập trình di động**
-* **Nhánh phát triển:** `datlnt`
 * **Repository:** [mobile-development-teamwork-](https://github.com/hieulefsdev-fs/mobile-development-teamwork-)
