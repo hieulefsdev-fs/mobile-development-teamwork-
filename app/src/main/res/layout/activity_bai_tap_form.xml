@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+    <Button
+        android:id="@+id/tro_ve"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="‹ Trở về" />
+    <TextView android:id="@+id/title" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textSize="24sp" android:textStyle="bold" android:paddingBottom="12dp" />
+    <EditText android:id="@+id/ten" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Tên bài tập (bắt buộc)" android:inputType="textCapSentences" android:singleLine="true" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/mon"
+        android:text="Môn học" />
+    <Button android:id="@+id/mon" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="@string/chon_mon_hoc" />
+    <Button
+        android:id="@+id/them_mon"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thêm môn học" />
+    <Button android:id="@+id/doi_ten_mon" style="?attr/borderlessButtonStyle"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Đổi tên môn đã chọn" />
+    <RadioGroup android:id="@+id/danh_sach_mon"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:visibility="gone" />
+    <LinearLayout android:id="@+id/khung_them_mon"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:visibility="gone">
+        <EditText android:id="@+id/ten_mon_moi" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:hint="Tên môn học"
+            android:inputType="textCapSentences" />
+        <Button android:id="@+id/luu_mon_moi" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Lưu môn học" />
+        <Button android:id="@+id/huy_them_mon" style="?attr/borderlessButtonStyle"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Hủy" />
+    </LinearLayout>
+    <EditText android:id="@+id/mo_ta" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Mô tả (tùy chọn)" android:inputType="textCapSentences|textMultiLine" android:minLines="3" android:gravity="top" />
+    <Button android:id="@+id/chon_ngay" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Chọn hạn nộp" />
+    <LinearLayout
+        android:id="@+id/khung_lich"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <DatePicker
+            android:id="@+id/lich_han_nop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="center" android:text="Giờ nộp (24 giờ)" />
+        <TimePicker android:id="@+id/gio_han_nop"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" android:timePickerMode="spinner" />
+        <Button android:id="@+id/xac_nhan_ngay" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Xác nhận ngày và giờ" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/loi_bieu_mau"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite"
+        android:visibility="gone" />
+    <Button android:id="@+id/luu" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Lưu bài tập" />
+</LinearLayout>
+</ScrollView>
+

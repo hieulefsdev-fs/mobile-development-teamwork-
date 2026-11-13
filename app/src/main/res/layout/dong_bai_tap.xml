@@ -1,0 +1,10 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="68dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/nen_the_bai_tap"
+    android:padding="16dp"
+    android:textColor="?attr/colorOnSurface"
+    android:textSize="16sp"
+    android:lineSpacingExtra="4dp" />

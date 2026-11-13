@@ -1,0 +1,10 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Nhom3_QuanLyBaiTapVaHanNopChoSinhVien" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#79DAD0</item>
+        <item name="colorOnPrimary">#003731</item>
+        <item name="android:windowBackground">#101D22</item>
+        <item name="colorSurface">#182B31</item>
+        <item name="colorOnSurface">#E1F0F1</item>
+    </style>
+</resources>
