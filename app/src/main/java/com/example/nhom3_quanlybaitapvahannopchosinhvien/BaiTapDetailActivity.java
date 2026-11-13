@@ -7,11 +7,11 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import android.view.View;
+import androidx.appcompat.app.AlertDialog;
 
 public class BaiTapDetailActivity extends BaiTapActivity {
     private long maBaiTap;
-    private View khungXoa;
+
     private boolean daHoanThanh;
     private TextView title;
     private TextView thongTin;
@@ -30,14 +30,13 @@ public class BaiTapDetailActivity extends BaiTapActivity {
         findViewById(R.id.sua).setOnClickListener(view ->
                 startActivity(new Intent(this, BaiTapFormActivity.class)
                         .putExtra(EXTRA_MA_BAI_TAP, maBaiTap)));
-        khungXoa = findViewById(R.id.khung_xoa);
-        findViewById(R.id.xoa).setOnClickListener(view -> {
-            khungXoa.setVisibility(View.VISIBLE);
-            khungXoa.post(() -> khungXoa.requestRectangleOnScreen(
-                    new android.graphics.Rect(0, 0, khungXoa.getWidth(), khungXoa.getHeight())));
-        });
-        findViewById(R.id.huy_xoa).setOnClickListener(view -> khungXoa.setVisibility(View.GONE));
-        findViewById(R.id.xac_nhan_xoa).setOnClickListener(view -> xacNhanXoa());
+        findViewById(R.id.xoa).setOnClickListener(view ->
+                new AlertDialog.Builder(this)
+                        .setTitle("Xóa bài tập?")
+                        .setMessage("Bạn có muốn xóa bài “" + title.getText() + "”?")
+                        .setNegativeButton("Hủy", null)
+                        .setPositiveButton("Xóa", (dialog, which) -> xacNhanXoa())
+                        .show());
     }
 
     @Override

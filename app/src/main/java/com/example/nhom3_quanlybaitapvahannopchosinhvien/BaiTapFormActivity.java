@@ -11,20 +11,26 @@ import android.view.inputmethod.InputMethodManager;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.DatePicker;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+
+import androidx.appcompat.app.AlertDialog;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class BaiTapFormActivity extends BaiTapActivity {
     private EditText ten;
     private EditText moTa;
     private Button mon;
-    private DatePicker lich;
-    private TimePicker gio;
+    private EditText ngayNop;
+    private EditText thangNop;
+    private EditText namNop;
+    private EditText gioNop;
+    private EditText phutNop;
     private boolean doiTenMon;
     private View khungLich;
     private final ArrayList<String> tenMonHoc = new ArrayList<>();
@@ -46,9 +52,11 @@ public class BaiTapFormActivity extends BaiTapActivity {
         ten = findViewById(R.id.ten);
         moTa = findViewById(R.id.mo_ta);
         mon = findViewById(R.id.mon);
-        lich = findViewById(R.id.lich_han_nop);
-        gio = findViewById(R.id.gio_han_nop);
-        gio.setIs24HourView(true);
+        ngayNop = findViewById(R.id.han_ngay);
+        thangNop = findViewById(R.id.han_thang);
+        namNop = findViewById(R.id.han_nam);
+        gioNop = findViewById(R.id.han_gio);
+        phutNop = findViewById(R.id.han_phut);
         khungLich = findViewById(R.id.khung_lich);
         chonNgay = findViewById(R.id.chon_ngay);
         loiBieuMau = findViewById(R.id.loi_bieu_mau);
@@ -126,7 +134,7 @@ public class BaiTapFormActivity extends BaiTapActivity {
     }
 
     private void chonMonHoc() {
-        android.widget.RadioGroup danhSach = findViewById(R.id.danh_sach_mon);
+        LinearLayout danhSach = findViewById(R.id.danh_sach_mon);
         if (danhSach.getVisibility() == View.VISIBLE) {
             danhSach.setVisibility(View.GONE);
             return;
@@ -140,10 +148,20 @@ public class BaiTapFormActivity extends BaiTapActivity {
         danhSach.removeAllViews();
         for (int i = 0; i < maMon.size(); i++) {
             int ma = maMon.get(i);
-            android.widget.RadioButton luaChon = new android.widget.RadioButton(this);
-            luaChon.setId(View.generateViewId());
-            luaChon.setText(tenMonHoc.get(i));
-            danhSach.addView(luaChon);
+            String tenMon = tenMonHoc.get(i);
+            LinearLayout dong = new LinearLayout(this);
+            dong.setGravity(android.view.Gravity.CENTER_VERTICAL);
+            RadioButton luaChon = new RadioButton(this);
+            luaChon.setText(tenMon);
+            dong.addView(luaChon, new LinearLayout.LayoutParams(
+                    0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            Button xoa = new Button(this, null, androidx.appcompat.R.attr.borderlessButtonStyle);
+            xoa.setText("×");
+            xoa.setContentDescription("Xóa môn " + tenMon);
+            int kichThuoc = Math.round(48 * getResources().getDisplayMetrics().density);
+            dong.addView(xoa, new LinearLayout.LayoutParams(kichThuoc, kichThuoc));
+            xoa.setOnClickListener(view -> hoiXoaMon(ma, tenMon));
+            danhSach.addView(dong);
             luaChon.setChecked(ma == maMonDaChon);
             luaChon.setOnClickListener(view -> {
                 maMonDaChon = ma;
@@ -153,6 +171,37 @@ public class BaiTapFormActivity extends BaiTapActivity {
             });
         }
         danhSach.setVisibility(View.VISIBLE);
+    }
+
+    private void hoiXoaMon(int ma, String tenMon) {
+        new AlertDialog.Builder(this)
+                .setTitle("Xóa môn học?")
+                .setMessage("Xóa môn “" + tenMon + "” và tất cả bài tập thuộc môn này?")
+                .setNegativeButton("Hủy", null)
+                .setPositiveButton("Xóa", (dialog, which) -> xoaMon(ma))
+                .show();
+    }
+
+    private void xoaMon(int ma) {
+        try {
+            int soDong = db.xoaMonHoc(ma);
+            thongBao(soDong > 0 ? "Đã xóa môn học" : "Môn học không còn tồn tại");
+            if (maBaiTap != 0) {
+                try (Cursor cursor = db.layChiTietBaiTap(maBaiTap)) {
+                    if (!cursor.moveToFirst()) {
+                        finish();
+                        return;
+                    }
+                }
+            }
+            taiMonHoc();
+            if (maMonDaChon == ma) maMonDaChon = 0;
+            hienThiMon();
+            findViewById(R.id.danh_sach_mon).setVisibility(View.GONE);
+            if (!maMon.isEmpty()) chonMonHoc();
+        } catch (SQLiteException e) {
+            baoLoi("Không xóa được môn học", e);
+        }
     }
 
     private void moOThemMon(boolean suaTen) {
@@ -206,29 +255,46 @@ public class BaiTapFormActivity extends BaiTapActivity {
             getSystemService(InputMethodManager.class)
                     .hideSoftInputFromWindow(dangNhap.getWindowToken(), 0);
         }
-        Calendar ngay = Calendar.getInstance();
-        if (hanNop != null) {
-            ngay.set(Integer.parseInt(hanNop.substring(0, 4)),
-                    Integer.parseInt(hanNop.substring(5, 7)) - 1,
-                    Integer.parseInt(hanNop.substring(8, 10)));
-        }
-        lich.updateDate(ngay.get(Calendar.YEAR), ngay.get(Calendar.MONTH),
-                ngay.get(Calendar.DAY_OF_MONTH));
-        gio.setHour(hanNop == null ? 23 : Integer.parseInt(hanNop.substring(11, 13)));
-        gio.setMinute(hanNop == null ? 59 : Integer.parseInt(hanNop.substring(14, 16)));
+        if (khungLich.getVisibility() == View.VISIBLE) return;
+        Calendar homNay = Calendar.getInstance();
+        ngayNop.setText(hanNop == null ? String.valueOf(homNay.get(Calendar.DAY_OF_MONTH))
+                : hanNop.substring(8, 10));
+        thangNop.setText(hanNop == null ? String.valueOf(homNay.get(Calendar.MONTH) + 1)
+                : hanNop.substring(5, 7));
+        namNop.setText(hanNop == null ? String.valueOf(homNay.get(Calendar.YEAR))
+                : hanNop.substring(0, 4));
+        gioNop.setText(hanNop == null ? "23" : hanNop.substring(11, 13));
+        phutNop.setText(hanNop == null ? "59" : hanNop.substring(14, 16));
         khungLich.setVisibility(View.VISIBLE);
         khungLich.post(() -> khungLich.requestRectangleOnScreen(
                 new android.graphics.Rect(0, 0, khungLich.getWidth(), khungLich.getHeight())));
     }
 
     private void xacNhanNgay() {
-        lich.clearFocus();
-        gio.clearFocus();
+        try {
+            int ngay = Integer.parseInt(ngayNop.getText().toString());
+            int thang = Integer.parseInt(thangNop.getText().toString());
+            int nam = Integer.parseInt(namNop.getText().toString());
+            int gio = Integer.parseInt(gioNop.getText().toString());
+            int phut = Integer.parseInt(phutNop.getText().toString());
+            if (nam < 1 || nam > 9999) {
+                namNop.setError("Nhập năm từ 1 đến 9999");
+                return;
+            }
+            Calendar moc = new GregorianCalendar();
+            moc.clear();
+            moc.setLenient(false);
+            moc.set(nam, thang - 1, ngay, gio, phut);
+            moc.getTimeInMillis();
+            hanNop = String.format(Locale.US, "%04d-%02d-%02d %02d:%02d",
+                    nam, thang, ngay, gio, phut);
+        } catch (IllegalArgumentException e) {
+            hienThiLoi("Nhập ngày hợp lệ, giờ từ 0 đến 23 và phút từ 0 đến 59.");
+            return;
+        }
+
         getSystemService(InputMethodManager.class)
-                .hideSoftInputFromWindow(gio.getWindowToken(), 0);
-        hanNop = String.format(Locale.US, "%04d-%02d-%02d %02d:%02d",
-                lich.getYear(), lich.getMonth() + 1, lich.getDayOfMonth(),
-                gio.getHour(), gio.getMinute());
+                .hideSoftInputFromWindow(khungLich.getWindowToken(), 0);
         khungLich.setVisibility(View.GONE);
         loiBieuMau.setVisibility(View.GONE);
         hienThiHanNop();

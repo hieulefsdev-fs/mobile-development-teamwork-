@@ -129,6 +129,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "ma_bai_tap = ?", new String[]{String.valueOf(maBaiTap)});
     }
 
+    public int xoaMonHoc(int maMon) {
+        SQLiteDatabase database = getWritableDatabase();
+        String[] args = {String.valueOf(maMon)};
+        database.beginTransaction();
+        try {
+            database.delete("BaiTap", "ma_mon_hoc = ?", args);
+            int soDong = database.delete("MonHoc", "ma_mon_hoc = ?", args);
+            database.setTransactionSuccessful();
+            return soDong;
+        } finally {
+            database.endTransaction();
+        }
+    }
+
     public int xoaBaiTap(long maBaiTap) {
         return getWritableDatabase().delete("BaiTap",
                 "ma_bai_tap = ?", new String[]{String.valueOf(maBaiTap)});

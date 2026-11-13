@@ -105,9 +105,16 @@ public class MainActivity extends BaiTapActivity {
         cacMon.removeAllViews();
         themLuaChonMon(null, "Tất cả môn học");
         try (Cursor cursor = db.layMonHoc()) {
+            boolean timThayMon = monDangLoc == null;
             while (cursor.moveToNext()) {
                 int ma = cursor.getInt(cursor.getColumnIndexOrThrow("ma_mon_hoc"));
                 themLuaChonMon(ma, doc(cursor, "ten_mon_hoc"));
+                if (java.util.Objects.equals(ma, monDangLoc)) timThayMon = true;
+            }
+            if (!timThayMon) {
+                monDangLoc = null;
+                cacMon.check(cacMon.getChildAt(0).getId());
+                boLoc.setText("Tất cả môn học");
             }
         } catch (SQLiteException e) {
             baoLoi("Không tải được môn học", e);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:scrollbars="vertical" android:fadeScrollbars="false">
 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
     <Button
         android:id="@+id/tro_ve"
@@ -25,7 +25,7 @@
     <Button android:id="@+id/doi_ten_mon" style="?attr/borderlessButtonStyle"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="Đổi tên môn đã chọn" />
-    <RadioGroup android:id="@+id/danh_sach_mon"
+    <LinearLayout android:id="@+id/danh_sach_mon"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="vertical" android:visibility="gone" />
     <LinearLayout android:id="@+id/khung_them_mon"
@@ -48,18 +48,71 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone">
-        <DatePicker
-            android:id="@+id/lich_han_nop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:datePickerMode="spinner"
-            android:calendarViewShown="false" />
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:gravity="center" android:text="Giờ nộp (24 giờ)" />
-        <TimePicker android:id="@+id/gio_han_nop"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" android:timePickerMode="spinner" />
+            android:text="Ngày / Tháng / Năm · Giờ / Phút (24 giờ)" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/han_ngay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="Ngày"
+                android:hint="Ngày"
+                android:inputType="number"
+                android:maxLength="2"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/han_thang"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="Tháng"
+                android:hint="Tháng"
+                android:inputType="number"
+                android:maxLength="2"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/han_nam"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.25"
+                android:contentDescription="Năm"
+                android:hint="Năm"
+                android:inputType="number"
+                android:maxLength="4"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/han_gio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="Giờ"
+                android:hint="Giờ"
+                android:inputType="number"
+                android:maxLength="2"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/han_phut"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="Phút"
+                android:hint="Phút"
+                android:inputType="number"
+                android:maxLength="2"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="14sp" />
+        </LinearLayout>
         <Button android:id="@+id/xac_nhan_ngay" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="Xác nhận ngày và giờ" />
     </LinearLayout>
